@@ -1,7 +1,6 @@
 # Nomisa - Vim/Neovim Plugin
 
-This plugin enables you to quickly edit a file in an external explication. If
-the file does not exist they can be created using templates.
+This plugin enables you to quickly create or edit a file in an external explication. If the file does not exist they can be created using templates.
 
 ## Why I made this.
 
