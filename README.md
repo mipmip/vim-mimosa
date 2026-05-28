@@ -47,6 +47,35 @@ See @images/diagram.svg for the architecture overview.
 Check @/home/user/project/sketch.png for details.
 ```
 
+## Using Mimosa with AI Coding Assistants
+
+Mimosa works well alongside AI tools like Claude Code and Codex. A typical workflow:
+
+1. You're writing a markdown presentation and want a diagram
+2. Ask your AI assistant to describe what the diagram should contain
+3. The AI responds with something like `see @images/architecture.svg`
+4. Place your cursor on that line and run `:Mimosa` — the file is created from template and opened in inkscape
+5. Draw the diagram based on the AI's description
+6. The AI can then read the image and give feedback
+
+Mimosa detects `@filepath` references that AI tools commonly use, so you can jump straight from an AI suggestion to your editor.
+
+### Recommended handlers for AI-adjacent tools
+
+```lua
+require("mimosa").setup({
+  extension_handlers = {
+    svg = "inkscape",
+    png = "gimp",
+    jpg = "gimp",
+    gif = "gimp",
+    drawio = "drawio",
+    kra = "krita",
+  },
+  -- Any format not listed above opens with your system default (xdg-open)
+})
+```
+
 ## Demo
 
 https://github.com/user-attachments/assets/b5684adb-b5cb-474f-9663-e74d044f4a03
@@ -54,7 +83,6 @@ https://github.com/user-attachments/assets/b5684adb-b5cb-474f-9663-e74d044f4a03
 ## Todo
 
 - make small video
-- currently only one extension template is supported
 
 ## Filetypes
 

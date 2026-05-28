@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-05-28 — Template picker and AI workflow docs
+
+- Template picker (`vim.ui.select`) when multiple templates exist for an extension
+- Renamed SVG template to `empty-canvas.svg`, added `wireframe-960x700.svg`
+- Added AI workflow section to README with recommended handler config
+- `get_template_file` and `open_template` refactored to callback-based for async picker
+
 ## 2026-05-28 — Default handler for all file formats
 
 - Added `default_handler` config with platform auto-detection (xdg-open/open/start)

@@ -1,22 +1,26 @@
-## ADDED Requirements
+## Requirements
 
 ### Requirement: Find template file for extension
 The plugin SHALL look up template files in `<templates_path>/<ext>/` matching `*.<ext>`.
 
 #### Scenario: Single template exists
 - **WHEN** `mimosa_templates/svg/` contains exactly one `.svg` file
-- **THEN** `get_template_file("svg")` SHALL return the path to that file
+- **THEN** `get_template_file("svg")` SHALL return the path to that file without prompting
 
 #### Scenario: Multiple templates exist
 - **WHEN** `mimosa_templates/svg/` contains multiple `.svg` files
-- **THEN** `get_template_file("svg")` SHALL return the first file found
+- **THEN** `get_template_file("svg")` SHALL show `vim.ui.select` with template filenames and return the selected file
+
+#### Scenario: User cancels template picker
+- **WHEN** the user cancels `vim.ui.select` at the template picker
+- **THEN** SHALL return nil (no file created, no handler launched)
 
 #### Scenario: No template exists
 - **WHEN** `mimosa_templates/svg/` is empty or does not exist
-- **THEN** `get_template_file("svg")` SHALL return nil and notify the user
+- **THEN** `get_template_file("svg")` SHALL return nil and notify the user if extension has explicit handler
 
 ### Requirement: Look up extension handler
-The plugin SHALL return the configured handler program for a given file extension, or nil if none is configured.
+The plugin SHALL return the configured handler program for a given file extension, falling back to `default_handler` if no explicit handler is configured.
 
 #### Scenario: Handler exists for extension
 - **WHEN** `extension_handlers` contains `svg = "inkscape"`
@@ -24,7 +28,7 @@ The plugin SHALL return the configured handler program for a given file extensio
 
 #### Scenario: No handler for extension
 - **WHEN** extension is `"txt"` and no handler is configured for it
-- **THEN** `get_extension_handler("txt")` SHALL return nil
+- **THEN** `get_extension_handler("txt")` SHALL return `default_handler`
 
 ### Requirement: Open template creates file from template if missing
 When opening a path that does not exist, the plugin SHALL create parent directories and copy the matching template file to the target path.
@@ -46,11 +50,11 @@ After ensuring the file exists, the plugin SHALL launch the configured external 
 
 #### Scenario: Handler configured
 - **WHEN** the file exists and a handler is configured for its extension
-- **THEN** the plugin SHALL call the handler with the file path (shell-escaped)
+- **THEN** the plugin SHALL call the handler with the file path
 
 #### Scenario: No handler configured
 - **WHEN** the file exists but no handler is configured for its extension
-- **THEN** the plugin SHALL do nothing (no error)
+- **THEN** the plugin SHALL use `default_handler` to open the file
 
 ### Requirement: Paths resolve relative to current buffer directory
 All paths passed to `open_template` SHALL be resolved relative to the directory of the current buffer (`vim.fn.expand("%:h")`).
@@ -58,3 +62,10 @@ All paths passed to `open_template` SHALL be resolved relative to the directory 
 #### Scenario: Relative path resolution
 - **WHEN** current buffer is `/home/user/notes/readme.md` and path is `images/fig.svg`
 - **THEN** the resolved path SHALL be `/home/user/notes/images/fig.svg`
+
+### Requirement: Descriptive template filenames
+Templates SHALL use descriptive filenames that serve as labels in the picker.
+
+#### Scenario: Default SVG templates
+- **WHEN** the plugin ships default SVG templates
+- **THEN** SHALL include `empty-canvas.svg` and `wireframe-960x700.svg`
