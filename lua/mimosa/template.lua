@@ -1,4 +1,4 @@
-local config = require("nomisa.config")
+local config = require("mimosa.config")
 
 local M = {}
 
@@ -10,7 +10,7 @@ function M.get_template_file(ext)
   local pattern = config.values.templates_path .. ext .. "/*." .. ext
   local files = vim.fn.glob(pattern, false, true)
   if #files == 0 then
-    vim.notify("Nomisa: no template file found for " .. ext, vim.log.levels.WARN)
+    vim.notify("Mimosa: no template file found for " .. ext, vim.log.levels.WARN)
     return nil
   end
   return files[1]

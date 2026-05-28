@@ -1,4 +1,4 @@
-local parse = require("nomisa.parse")
+local parse = require("mimosa.parse")
 
 describe("parse", function()
   describe("extract_path_from_line", function()

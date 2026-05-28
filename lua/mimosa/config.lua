@@ -2,12 +2,12 @@ local M = {}
 
 local function get_plugin_root()
   local source = debug.getinfo(1, "S").source:sub(2)
-  -- source is <plugin_root>/lua/nomisa/config.lua, go up 3 levels
+  -- source is <plugin_root>/lua/mimosa/config.lua, go up 3 levels
   return vim.fn.fnamemodify(source, ":h:h:h")
 end
 
 local defaults = {
-  templates_path = get_plugin_root() .. "/nomisa_templates/",
+  templates_path = get_plugin_root() .. "/mimosa_templates/",
   extension_handlers = {
     svg = "inkscape",
     png = "gimp",

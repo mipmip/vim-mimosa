@@ -5,7 +5,7 @@ The plugin SHALL provide default configuration with `templates_path` auto-detect
 
 #### Scenario: Default templates path
 - **WHEN** the plugin loads without user configuration
-- **THEN** `templates_path` SHALL be set to `<plugin_root>/nomisa_templates/`
+- **THEN** `templates_path` SHALL be set to `<plugin_root>/mimosa_templates/`
 
 #### Scenario: Default extension handlers
 - **WHEN** the plugin loads without user configuration

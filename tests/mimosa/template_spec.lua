@@ -1,5 +1,5 @@
-local config = require("nomisa.config")
-local template = require("nomisa.template")
+local config = require("mimosa.config")
+local template = require("mimosa.template")
 
 describe("template", function()
   local tmpdir
