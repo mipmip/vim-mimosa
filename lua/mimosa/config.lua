@@ -6,8 +6,15 @@ local function get_plugin_root()
   return vim.fn.fnamemodify(source, ":h:h:h")
 end
 
+local function detect_opener()
+  if vim.fn.has("mac") == 1 then return "open" end
+  if vim.fn.has("win32") == 1 then return "start" end
+  return "xdg-open"
+end
+
 local defaults = {
   templates_path = get_plugin_root() .. "/mimosa_templates/",
+  default_handler = detect_opener(),
   extension_handlers = {
     svg = "inkscape",
     png = "gimp",

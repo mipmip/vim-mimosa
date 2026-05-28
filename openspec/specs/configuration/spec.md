@@ -11,6 +11,21 @@ The plugin SHALL provide default configuration with `templates_path` auto-detect
 - **WHEN** the plugin loads without user configuration
 - **THEN** `extension_handlers` SHALL contain `{svg = "inkscape", png = "gimp", jpg = "gimp", gif = "gimp"}`
 
+### Requirement: Default handler for unconfigured extensions
+The plugin SHALL provide a `default_handler` config option, auto-detected based on platform: `xdg-open` (Linux), `open` (macOS), `start` (Windows).
+
+#### Scenario: Default on Linux
+- **WHEN** the plugin loads on Linux without user configuration
+- **THEN** `default_handler` SHALL be `"xdg-open"`
+
+#### Scenario: User overrides default handler
+- **WHEN** user calls `setup({ default_handler = "my-opener" })`
+- **THEN** `default_handler` SHALL be `"my-opener"`
+
+#### Scenario: Fallback for unconfigured extension
+- **WHEN** `get_extension_handler` is called with an extension not in `extension_handlers`
+- **THEN** SHALL return `default_handler`
+
 ### Requirement: User can override configuration via setup()
 The plugin SHALL accept a `setup(opts)` call that deep-merges user options over defaults.
 

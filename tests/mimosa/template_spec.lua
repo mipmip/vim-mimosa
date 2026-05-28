@@ -27,8 +27,25 @@ describe("template", function()
       assert.equals("fake-handler", template.get_extension_handler("svg"))
     end)
 
-    it("returns nil for unconfigured extension", function()
-      assert.is_nil(template.get_extension_handler("txt"))
+    it("falls back to default_handler for unconfigured extension", function()
+      assert.equals(config.values.default_handler, template.get_extension_handler("txt"))
+    end)
+
+    it("uses explicit handler over default_handler", function()
+      config.setup({
+        templates_path = tmpdir .. "/",
+        extension_handlers = { svg = "inkscape" },
+      })
+      assert.equals("inkscape", template.get_extension_handler("svg"))
+    end)
+
+    it("respects user-overridden default_handler", function()
+      config.setup({
+        templates_path = tmpdir .. "/",
+        extension_handlers = {},
+        default_handler = "my-opener",
+      })
+      assert.equals("my-opener", template.get_extension_handler("docx"))
     end)
   end)
 
@@ -45,9 +62,28 @@ describe("template", function()
       assert.is_not_nil(result)
     end)
 
-    it("returns nil when no template exists", function()
+    it("returns nil without warning for unconfigured extension", function()
+      local warned = false
+      local orig_notify = vim.notify
+      vim.notify = function() warned = true end
       local result = template.get_template_file("webp")
+      vim.notify = orig_notify
       assert.is_nil(result)
+      assert.is_false(warned)
+    end)
+
+    it("returns nil with warning for configured extension missing template", function()
+      config.setup({
+        templates_path = tmpdir .. "/",
+        extension_handlers = { webp = "gimp" },
+      })
+      local warned = false
+      local orig_notify = vim.notify
+      vim.notify = function() warned = true end
+      local result = template.get_template_file("webp")
+      vim.notify = orig_notify
+      assert.is_nil(result)
+      assert.is_true(warned)
     end)
   end)
 

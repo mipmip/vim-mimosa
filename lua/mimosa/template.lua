@@ -4,13 +4,16 @@ local M = {}
 
 function M.get_extension_handler(ext)
   return config.values.extension_handlers[ext]
+      or config.values.default_handler
 end
 
 function M.get_template_file(ext)
   local pattern = config.values.templates_path .. ext .. "/*." .. ext
   local files = vim.fn.glob(pattern, false, true)
   if #files == 0 then
-    vim.notify("Mimosa: no template file found for " .. ext, vim.log.levels.WARN)
+    if config.values.extension_handlers[ext] then
+      vim.notify("Mimosa: no template file found for " .. ext, vim.log.levels.WARN)
+    end
     return nil
   end
   return files[1]

@@ -1,5 +1,4 @@
-# vim-mimosa
-
+# Mimosa vim Plugin
 
 <p align="center">
   <img src="mimosa-logo.png" width="200" alt="mimosa logo">
@@ -21,13 +20,32 @@ other application.
 ## Features
 
 - opens file under the cursor in external application
+- create new files from scratch with `:MimosaNew` (picks filetype, prompts for path, inserts tag)
 - creates file from template if not existing yet
 - makes parent directories if they do not exist
 - extendable with new extensions
+- cursor-aware: picks the closest match when multiple references exist on one line
 
-## Limitations
+## Supported Formats
 
-- currently only able to detect file paths inside `![]()` markdown image tags.
+Mimosa detects file paths in these formats:
+
+```markdown
+<!-- Markdown image links -->
+![alt text](images/diagram.svg)
+
+<!-- Markdown links -->
+[click here](docs/guide.pdf)
+
+<!-- HTML img tags (double, single, or unquoted) -->
+<img src="images/photo.png">
+<img src='images/photo.png'>
+<img alt="photo" src="team.jpg" width="100">
+
+<!-- @filepath references (e.g. from Claude Code output) -->
+See @images/diagram.svg for the architecture overview.
+Check @/home/user/project/sketch.png for details.
+```
 
 ## Demo
 
@@ -74,7 +92,11 @@ require("mimosa").setup({
   -- default path is in plugin directory
   templates_path = "<plugin_root>/mimosa_templates/",
 
-  -- every extension should have an application configured
+  -- fallback handler for extensions without an explicit handler
+  -- auto-detected: xdg-open (Linux), open (macOS), start (Windows)
+  default_handler = "xdg-open",
+
+  -- extensions with explicit handlers (templates are only used for these)
   extension_handlers = {
     svg = "inkscape",
     png = "gimp",
@@ -82,6 +104,28 @@ require("mimosa").setup({
     gif = "gimp",
   },
 })
+```
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `:Mimosa` | Open the file reference under the cursor in its configured handler |
+| `:MimosaVisSel` | Open the visually selected path in its configured handler |
+| `:MimosaNew` | Create a new file — pick filetype, enter path, inserts tag at cursor |
+| `:MimosaNew svg` | Create a new svg — skip the filetype picker |
+| `:MimosaNew svg images/diagram` | Create a new svg — skip picker and path prompt |
+
+`:MimosaNew` inserts the tag in the appropriate format for your buffer: `![](path)` in markdown/quarto, `<img src="path">` in html.
+
+## Recommended Keybindings
+
+Mimosa does not set any keybindings by default. Here are some recommended mappings:
+
+```lua
+vim.keymap.set("n", "<leader>mo", ":Mimosa<CR>")
+vim.keymap.set("n", "<leader>mn", ":MimosaNew<CR>")
+vim.keymap.set("n", "<leader>ms", ":MimosaNew svg<CR>")
 ```
 
 ### Custom template path
