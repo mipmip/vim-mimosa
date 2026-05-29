@@ -6,6 +6,8 @@
 
 This plugin enables you to quickly create or edit a file in an external application. If the file does not exist it can be created using templates.
 
+![](vid.webp)
+
 ## Why I made this.
 
 I make presentations in markdown (quarto with revealjs). Markdown is perfect
@@ -76,9 +78,6 @@ require("mimosa").setup({
 })
 ```
 
-## Demo
-
-https://github.com/user-attachments/assets/b5684adb-b5cb-474f-9663-e74d044f4a03
 
 ## Todo
 
